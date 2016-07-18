@@ -2,19 +2,78 @@ import {Config} from './config';
 import Humane from 'humane-js';
 import {inject} from 'aurelia-dependency-injection';
 import {I18N} from 'aurelia-i18n';
-import {readonly} from 'javascript-decorators';
 import {DOM} from 'aurelia-pal';
 import extend from 'extend';
 
+// from https://github.com/AvraamMavridis/javascript-decorators/
+const readonly = function() {
+  return function( key, target, descriptor ) {
+    descriptor.writable = false;
+    return descriptor;
+  };
+};
+
+/**
+ * The Notification class. Notify using humane-js with your custom names and defaults
+ */
 @inject(Config, Humane, I18N)
 export class Notification {
 
   /**
-   * Construct.
+     * Notify 'note' (translated if applicable) using humane.log.
+     *
+     * @param {String|String[]}  message|multi-line message.
+     * @param {{}}               [options] for this particular notification.
+     * @param {{}}               [defaults] for this type of notification.
+     *
+     * @return {Promise}
+     *
+     */
+  note(message, options = {}, defaults = this.__config.defaults) {}
+
+  /**
+     * Notify 'success' (translated if applicable) using humane.log.
+     *
+     * @param {String|String[]}  message|multi-line message.
+     * @param {{}}               [options] for this particular notification.
+     * @param {{}}               [defaults] for this type of notification.
+     *
+     * @return {Promise}
+     *
+     */
+  success(message, options = {}, defaults = this.__config.defaults) {}
+
+  /**
+     * Notify 'error' (translated if applicable) using humane.log.
+     *
+     * @param {String|String[]}  message|multi-line message.
+     * @param {{}}               [options] for this particular notification.
+     * @param {{}}               [defaults] for this type of notification.
+     *
+     * @return {Promise}
+     *
+     */
+  error(message, options = {}, defaults = this.__config.defaults) {}
+
+  /**
+     * Notify 'info' (translated if applicable) using humane.log.
+     *
+     * @param {String|String[]}  message|multi-line message.
+     * @param {{}}               [options] for this particular notification.
+     * @param {{}}               [defaults] for this type of notification.
+     *
+     * @return {Promise}
+     *
+     */
+  info(message, options = {}, defaults = this.__config.defaults) {}
+
+
+  /**
+   * Creates a Notification instance
    *
-   * @param {Config} config
-   * @param {Humane} humane
-   * @param {i18N}   I18N
+   * @param  {[Config]} config
+   * @param  {[Humane]} humane
+   * @param  {[I18N]}   i18N
    *
    * @constructor
    */
@@ -42,13 +101,15 @@ export class Notification {
   }
 
   /**
-   * Define a non-enumerable property on the Notification.
+   * Define a non-enumerable property on the notification.
    *
    * @param {string}  property
    * @param {*}       value
    * @param {boolean} [writable]
    *
    * @return {Notification}
+   *
+   * @readonly
    */
   @readonly()
   define(property, value, writable) {
@@ -68,6 +129,7 @@ export class Notification {
    *
    * @return {DOM.node}  [container]
    *
+   * @readonly
    */
   @readonly()
   setContainer(container) {
@@ -83,6 +145,7 @@ export class Notification {
    *
    * @return {string}  [base class]
    *
+   * @readonly
    */
   @readonly()
   setBaseCls(baseCls = this.__config.defaults.baseCls) {
@@ -98,9 +161,10 @@ export class Notification {
    *
    * @return {Boolean}
    *
+   * @readonly
    */
   @readonly()
-  translate(options, defaults) {
+  translate(options = {}, defaults = {}) {
     let joined = extend({}, this.__config, defaults, options);
     return joined.translate;
   }
@@ -114,10 +178,11 @@ export class Notification {
    *
    * @return {Promise}
    *
+   * @readonly
    */
   @readonly()
-  log(message, options, defaults = this.__config.defaults) {
-    if (this.translate()) {
+  log(message, options = {}, defaults = this.__config.defaults) {
+    if (this.translate(options, defaults)) {
       if (message instanceof Array) {
         message = message.map(item=>this.i18n.tr(item));
       } else {
@@ -138,6 +203,8 @@ export class Notification {
    *
    * @return {function(message, options)}
    *
+   * @readonly
+   *
    */
   @readonly()
   spawn(addnDefaults) {
@@ -154,6 +221,7 @@ export class Notification {
    *
    * @return {Promise}
    *
+   * @readonly
    */
   @readonly()
   remove() {

@@ -1,9 +1,8 @@
 # aurelia-notification
 
-[![ZenHub](https://raw.githubusercontent.com/ZenHubIO/support/master/zenhub-badge.png)](https://zenhub.io)
-[![Join the chat at https://gitter.im/aurelia/discuss](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/aurelia/discuss?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+[![Gitter](https://img.shields.io/gitter/room/nwjs/nw.js.svg?maxAge=2592000?style=plastic)](https://gitter.im/SpoonX/Dev)
 
-This library is an unofficial plugin for the [Aurelia](http://www.aurelia.io/) platform and contains a simple but fully configurable notification service using [humane-js](http://wavded.github.io/humane-js/). While all options of humane-js are available (instead of adding callbacks, promises are returned where applicable though), basic usage doesn't require more than adding your own css or selecting one of humane-js css files as specified below.
+This library is an unofficial plugin for the [Aurelia](http://www.aurelia.io/) platform and contains a simple but fully configurable notification service using [humane-js](http://wavded.github.io/humane-js/). While all options of humane-js are available (instead of adding callbacks, promises are returned where applicable though), basic usage doesn't require more than adding a humane-js style or a custom humane-js-based style as specified below.
 
 **Note:** [aurelia i18n](https://github.com/aurelia/i18n) needs to be installed and configured. All notifications will get automatically translated. You can turn off translations, either generally in the optional plugin configuration, or for individual notifications.
 
@@ -19,17 +18,74 @@ This library can be used in the **browser** only.
 
 ## Important note
 
-We've simplified installation and usage! This plugin should now be installed using `jspm i aurelia-notification` or (for webpack) `npm i aurelia-notification`. With this change `aurelia-notification` will use an npm installation of [humane-js](http://wavded.github.io/humane-js/). Make sure you update all references to `spoonx/aurelia-notification` and, if applicable to `wavded/humane-js`, remove the `spoonx/` resp. `wavded/` prefixes (don't forget your config.js, package.json, imports and bundles).
+We've simplified installation and usage! This plugin should now be installed using `jspm i aurelia-notification` or (for webpack) `npm i aurelia-notification`. With this change `aurelia-notification` will use an npm installation of [humane-js](https://www.npmjs.com/package/humane-js). Make sure you update all references to `spoonx/aurelia-notification` and, if applicable to `wavded/humane-js`, remove the `spoonx/` resp. `wavded/` prefixes (don't forget your config.js, package.json, imports and bundles).
 
 ## Installation
 
-Installing this module is fairly simple.
+### Aureli-Cli
 
-Run `jspm i aurelia-notification` from your project root.
+Run `npm i aurelia-notification --save` from your project root.
 
-Either set your own styles or install `humane-js` with `jspm i npm:humane-js` to have some default styles to choose from.
+Aurelia-notification makes use of `extends` and `humane-js`. So, add following to the `build/bundles/dependencies` section of `aurelia-project/aurelia.json`.
+
+```js
+"dependencies": [
+  // ...
+  'extends',
+  'humane-js',
+  'aurelia-notification',
+  // ...
+],
+```
+
+### Jspm
+
+Run `jspm i aurelia-notification`
+
+If the installation results in having forks, try resolving them by running:
+
+```sh
+jspm inspect --forks
+jspm resolve --only registry:package-name@version
+```
+
+E.g.
+
+```sh
+jspm inspect --forks
+>     Installed Forks
+>         npm:aurelia-dependency-injection 1.0.0-beta.1.2.3 1.0.0-beta.2.1.0
+
+jspm resolve --only npm:aurelia-dependency-injection@1.0.0-beta.2.1.0
+```
+
+### Webpack
+
+Run `npm i aurelia-notification --save` from your project root.
+
+Add `'aurelia-notification'` in the `coreBundles.aurelia section` of your `webpack.config.js`.
+
+### Typescript
+
+Add to your `typings.json`
+
+```js
+"aurelia-notification": "github:spoonx/aurelia-notification",
+```
+
+and run `typings i`
+
+or run
+
+```sh
+typings i github:spoonx/aurelia-notification
+```
 
 ## Usage
+
+### Adding styles for humane-js
+
+Either add your custom humane-js-based style or install `humane-js` with `jspm i npm:humane-js` to have some default styles to choose from. See the [humane-js custom-themes](https://github.com/wavded/humane-js#custom-themes) for instructions to make a custom style.
 
 ### Configuring the plugin
 
@@ -42,6 +98,7 @@ aurelia.use
   /* Your other plugins and init code */
   .plugin('aurelia-notification', config => {
     config.configure({
+      translate: false,  // 'true' needs aurelia-i18n to be configured
       notifications: {
         'success': 'humane-libnotify-success',
         'error': 'humane-libnotify-error',
@@ -58,12 +115,11 @@ Import the module, and get cracking.
 ```javascript
 import {inject} from 'aurelia-framework';
 import {Notification} from 'aurelia-notification';
-/* optional:
- * import a css file to use one of the humane-js styles for the notifications.
- * For the four default notification types to display correctly also set the
+/* import a humane-js style or a custom humane-js-based style.
+ * For the four default notification types to display correctly, also set the
  * corresponding classes in the plugin configuration (see example above).
  */
-// import "humane-js/themes/libnotify.css!";
+ import "humane-js/themes/libnotify.css!";
 
 @inject(Notification)
 export class SomeViewModel {
@@ -71,7 +127,7 @@ export class SomeViewModel {
   constructor (notification) {
     notification.note('Plain');
     notification.success('Record created successfully');
-    notification.error('Record creation failed');    
+    notification.error('Record creation failed');
     notification.info('New message');
   }
 }

@@ -1,6 +1,6 @@
 # Docs for {`Notification`}
 
-```javascript
+```js
 import {Notification} from 'aurelia-notification';
 ```
 
@@ -10,10 +10,11 @@ import {Notification} from 'aurelia-notification';
 
 Set a new configuration based on current configuration. The same options as in the plugin configuration are available. The default configuration for this plugin is
 
-```javascript
+```js
 {
-  translate: true,      // translate messages
-  defaults: {},         // defaults for all notificatons are humane-js defaults
+  translate: true,      // translate messages {true/false}.
+                        // translate: true needs aurelia-i18n to be configured
+  defaults: {},         // defaults for all notifications are humane-js defaults
   notifications: {      // default methods definitions
     note: {},           // method name and their defaults
     success: {addnCls: 'success'},
@@ -23,7 +24,7 @@ Set a new configuration based on current configuration. The same options as in t
 }
 ```
 
-The notifications object accepts `methodName:'addnClsName'` or `methodName:optionsObject`. defaults.baseCls sets the base css class for humane-js notifications. The default of humane-js is {baseCls: 'humane'}. For the available defaults/options see [humane-js](http://wavded.github.io/humane-js/).
+The notifications object accepts `methodName:'addnClsName'` or `methodName:optionsObject`. defaults.baseCls sets the base css class for humane-js notifications. The default of humane-js is {baseCls: 'humane'}. For the available defaults/options see [humane-js](https://www.npmjs.com/package/humane-js).
 
 ### Parameters
 
@@ -37,7 +38,7 @@ The configuration object
 
 ### Examples
 
-```javascript
+```js
 this.notification.configure(
   notifications: {
     success: 'smallSuccess',   // converts to {addnCls: 'smallSuccess'}
@@ -65,7 +66,7 @@ The new baseCls
 
 ### Examples
 
-```javascript
+```js
 this.setBaseClass('humane-libnotify');
 ```
 
@@ -87,13 +88,13 @@ The new container
 
 ### Examples
 
-```javascript
+```js
 this.setContainer($('.content'));
 ```
 
 ----------
 
-## .log(message\[, options[, defaults]])
+## .log(message[, options[, defaults]])
 
 Notify using humane.log. Depending on options and defaults, the message gets translated using i18n if available.
 
@@ -111,7 +112,7 @@ Promise.resolve when finished
 
 ### Examples
 
-```javascript
+```js
 this.notification.log('Color will change when finished')
 .then(()=>document.body.style.backgroundColor='#a66000');
 ```
@@ -122,7 +123,7 @@ this.notification.log('Color will change when finished')
 
 ## .success(message[, options])
 
-## .error(message\[, options)
+## .error(message[, options)
 
 ## .info(message[, options])
 
@@ -141,7 +142,7 @@ Promise.resolve when finished
 
 ### Examples
 
-```javascript
+```js
 this.notification.success('Yippy!!');
 this.notification.error(['Darn','Not available']);
 this.notification.info('Still there?', {waitForMove: true})
@@ -162,11 +163,11 @@ Sets a shortcut for .log with defaults.
 
 ### Returns
 
-A .log(message\[, options[, defaults]]) function with defaults applied.
+A .log(message[, options[, defaults]]) function with defaults applied.
 
 ### Examples
 
-```javascript
+```js
 let mylog = this.notification.spawn({addCls:'alert'});
 
 mylog('This is a translated custom alert')
@@ -185,6 +186,6 @@ Promise.resolve when finished
 
 ### Examples
 
-```javascript
+```js
 this.notification.remove();
 ```
