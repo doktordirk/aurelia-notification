@@ -2,22 +2,7 @@ import extend from 'extend';
 import Humane from 'humane-js';
 import {inject} from 'aurelia-dependency-injection';
 import {I18N} from 'aurelia-i18n';
-<<<<<<< HEAD
-import {readonly} from 'javascript-decorators';
 import {DOM} from 'aurelia-pal';
-
-export class Config {
-  // translate on/off
-  translate = true
-  // defaults for all notifictaions
-  defaults = {}
-  // notification names and their specific defaults
-=======
-import {DOM} from 'aurelia-pal';
-
-export function configure(aurelia, config) {
-  return config(aurelia.container.get(Config));
-}
 
 /**
  * The Config class. Configures the notifications
@@ -39,7 +24,6 @@ export class Config {
    * Notification names and their specific defaults
    * @param {Object}
    */
->>>>>>> dep-update
   notifications = {
     note: {},
     success: {addnCls: 'success'},
@@ -47,8 +31,6 @@ export class Config {
     info: {addnCls: 'info'}
   }
 
-<<<<<<< HEAD
-=======
   /**
    * Configuration fanction for notifications
    *
@@ -59,7 +41,6 @@ export class Config {
    *
    * @chainable
    */
->>>>>>> dep-update
   configure(incomming = {}, base = this) {
     this.translate     = 'translate' in incomming ? incomming.translate : base.translate;
     this.defaults      = extend({}, base.defaults, incomming.defaults);
@@ -69,13 +50,13 @@ export class Config {
   }
 }
 
-<<<<<<< HEAD
-=======
+export function configure(aurelia, config) {
+  return config(aurelia.container.get(Config));
+}
+
 // from https://github.com/AvraamMavridis/javascript-decorators/
-const readonly = function ()
-{
-  return function ( key, target, descriptor )
-  {
+const readonly = function() {
+  return function( key, target, descriptor ) {
     descriptor.writable = false;
     return descriptor;
   };
@@ -84,18 +65,10 @@ const readonly = function ()
 /**
  * The Notification class. Notify using humane-js with your custom names and defaults
  */
->>>>>>> dep-update
 @inject(Config, Humane, I18N)
 export class Notification {
 
   /**
-<<<<<<< HEAD
-   * Construct.
-   *
-   * @param {Config} config
-   * @param {Humane} humane
-   * @param {i18N}   I18N
-=======
      * Notify 'note' (translated if applicable) using humane.log.
      *
      * @param {String|String[]}  message|multi-line message.
@@ -150,7 +123,6 @@ export class Notification {
    * @param  {[Config]} config
    * @param  {[Humane]} humane
    * @param  {[I18N]}   i18N
->>>>>>> dep-update
    *
    * @constructor
    */
@@ -178,22 +150,15 @@ export class Notification {
   }
 
   /**
-<<<<<<< HEAD
-   * Define a non-enumerable property on the Notification.
-=======
    * Define a non-enumerable property on the notification.
->>>>>>> dep-update
    *
    * @param {string}  property
    * @param {*}       value
    * @param {boolean} [writable]
    *
    * @return {Notification}
-<<<<<<< HEAD
-=======
    *
    * @readonly
->>>>>>> dep-update
    */
   @readonly()
   define(property, value, writable) {
@@ -213,10 +178,7 @@ export class Notification {
    *
    * @return {DOM.node}  [container]
    *
-<<<<<<< HEAD
-=======
    * @readonly
->>>>>>> dep-update
    */
   @readonly()
   setContainer(container) {
@@ -232,10 +194,7 @@ export class Notification {
    *
    * @return {string}  [base class]
    *
-<<<<<<< HEAD
-=======
    * @readonly
->>>>>>> dep-update
    */
   @readonly()
   setBaseCls(baseCls = this.__config.defaults.baseCls) {
@@ -251,16 +210,10 @@ export class Notification {
    *
    * @return {Boolean}
    *
-<<<<<<< HEAD
-   */
-  @readonly()
-  translate(options, defaults) {
-=======
    * @readonly
    */
   @readonly()
   translate(options = {}, defaults = {}) {
->>>>>>> dep-update
     let joined = extend({}, this.__config, defaults, options);
     return joined.translate;
   }
@@ -274,18 +227,11 @@ export class Notification {
    *
    * @return {Promise}
    *
-<<<<<<< HEAD
-   */
-  @readonly()
-  log(message, options, defaults = this.__config.defaults) {
-    if (this.translate()) {
-=======
    * @readonly
    */
   @readonly()
   log(message, options = {}, defaults = this.__config.defaults) {
     if (this.translate(options, defaults)) {
->>>>>>> dep-update
       if (message instanceof Array) {
         message = message.map(item=>this.i18n.tr(item));
       } else {
@@ -306,11 +252,8 @@ export class Notification {
    *
    * @return {function(message, options)}
    *
-<<<<<<< HEAD
-=======
    * @readonly
    *
->>>>>>> dep-update
    */
   @readonly()
   spawn(addnDefaults) {
@@ -327,10 +270,7 @@ export class Notification {
    *
    * @return {Promise}
    *
-<<<<<<< HEAD
-=======
    * @readonly
->>>>>>> dep-update
    */
   @readonly()
   remove() {
@@ -339,16 +279,3 @@ export class Notification {
     });
   }
 }
-<<<<<<< HEAD
-
-function configure(aurelia, config) {
-  return config(aurelia.container.get(Config));
-}
-
-export {
-  Config,
-  Notification,
-  configure
-};
-=======
->>>>>>> dep-update
